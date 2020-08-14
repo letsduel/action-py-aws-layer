@@ -14,7 +14,7 @@ runs:
     - id: Push-to-AWS
       run: |
         pwd
-        ./deploy.sh
+        deploy.sh
       shell: sh
 branding:
   icon: 'cloud-lightning'
