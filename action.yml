@@ -12,8 +12,10 @@ runs:
   using: composite
   steps:
     - id: Push-to-AWS
-      run: ./deploy.sh
-      shell: bash
+      run: |
+        pwd
+        ./deploy.sh
+      shell: sh
 branding:
   icon: 'cloud-lightning'
   color: 'white'
