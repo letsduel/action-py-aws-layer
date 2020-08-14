@@ -9,7 +9,8 @@ inputs:
     description: The Lambda function name. Check the AWS docs/readme for examples.
     required: true
 runs: 
-  deploy.sh
+  using: shell
+  name: ./deploy.sh
 branding:
   icon: 'cloud-lightning'
   color: 'white'
