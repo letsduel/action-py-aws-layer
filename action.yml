@@ -8,8 +8,7 @@ inputs:
   lambda_function_name:
     description: The Lambda function name. Check the AWS docs/readme for examples.
     required: true
-run: |
-  pwd
+runs: 
   deploy.sh
 branding:
   icon: 'cloud-lightning'
