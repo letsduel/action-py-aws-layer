@@ -9,8 +9,11 @@ inputs:
     description: The Lambda function name. Check the AWS docs/readme for examples.
     required: true
 runs: 
-  using: shell
-  name: ./deploy.sh
+  using: composite
+  steps:
+    - id: Push-to-AWS
+      run: ./deploy.sh
+      shell: bash
 branding:
   icon: 'cloud-lightning'
   color: 'white'
