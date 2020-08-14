@@ -2,10 +2,6 @@ name: AWS Lambda Zip Deploy - Python
 author: Ope Usman
 description: Zip deploy to AWS Lambda with requirements in a separate layer.
 inputs:
-  requirements_txt:
-    description: the name/path to the requirements.txt file
-    required: true
-    default: 'requirements.txt'
   lambda_layer_arn:
     description: The ARN for the Lambda layer the dependencies should be pushed to without the version (every push is a new version).
     required: true
@@ -14,7 +10,7 @@ inputs:
     required: true
 runs: |
   pwd
-  
+  deploy.sh
 #  using: 'docker'
 #  image: 'Dockerfile'
 #  args:
