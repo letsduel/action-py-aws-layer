@@ -24,7 +24,7 @@ publishing_as_layer(){
 }
 
 update_function_layers(){
-	echo "Using the layer in the functions... ${lambda_functions}"
+	echo "Using the layer in the functions... ${lambda_functions} ${LAYER_ARN_VERSION}"
 	aws lambda update-function-configuration --function-name "${lambda_functions}" --layers "${LAYER_ARN_VERSION}" --region "us-east-1"
 }
 
