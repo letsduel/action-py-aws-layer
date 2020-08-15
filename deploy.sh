@@ -29,8 +29,8 @@ update_function_layers(){
 }
 
 deploy_aws_layer(){
-	export
-	configure_aws_credentials
+	#export
+	#configure_aws_credentials
 	zipping_code
 	publishing_as_layer
 	update_function_layers
