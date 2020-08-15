@@ -11,15 +11,15 @@ zipping_code(){
     cd ..
 	mkdir python
     rsync -r --exclude '*.git*' ./* ./python
-	zip -r code.zip ./python
+	zip -qq -r code.zip ./python
 }
 
 publishing_as_layer(){
 	echo "Publishing as ${lambda_layer} layer..."
 
 	#local result=$(aws lambda publish-layer-version --layer-name "${lambda_layer}" --zip-file fileb://code.zip --region us-east-1)
-	LAYER_ARN="arn:aws:lambda:us-east-1:343449118303:layer:pymongo" #$(jq '.LayerVersion' <<< "$result")
-	LAYER_VERSION_ARN="arn:aws:lambda:us-east-1:343449118303:layer:pymongo:5" #$(jq '.LayerVersionArn' <<< "$result")
+	LAYER_ARN="arn:aws:lambda:us-east-1:343449118303:layer:sd-backend" #$(jq '.LayerVersion' <<< "$result")
+	LAYER_VERSION_ARN="arn:aws:lambda:us-east-1:343449118303:layer:sd-backend:2" #$(jq '.LayerVersionArn' <<< "$result")
 	rm -rf python
 	rm code.zip
 }
@@ -30,6 +30,7 @@ update_function_layers(){
 	echo "Fetching exisitng layers in function"
 	local res=$(aws lambda get-function --function-name "${lambda_functions}")
 	local existLayers=$(jq '.Configuration.Layers | map(select(.Arn | contains ("${LAYER_ARN}") | not ) | .Arn ) | join(" ")' <<< "$res")
+	echo "${existLayers}"
 
 	if [ $(wc -w <<< $existLayers) -le 4 ]
 	then 
