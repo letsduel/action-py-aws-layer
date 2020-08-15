@@ -16,6 +16,9 @@ runs:
         pwd
         ${{ github.action_path }}/deploy.sh
       shell: sh
+      env:
+        lambda_layer: ${{inputs.lambda_layer_arn}}
+
 branding:
   icon: 'cloud-lightning'
   color: 'white'
