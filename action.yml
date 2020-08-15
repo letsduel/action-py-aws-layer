@@ -18,6 +18,7 @@ runs:
       shell: sh
       env:
         lambda_layer: ${{inputs.lambda_layer_arn}}
+        lambda_functions: ${{inputs.lambda_function_name}}
 
 branding:
   icon: 'cloud-lightning'
