@@ -29,7 +29,7 @@ update_function_layers(){
 
 	echo "Fetching exisitng layers in function"
 	local res=$(aws lambda get-function --function-name "${lambda_functions}")
-	local existLayers=$(jq '.Configuration.Layers | map(select(.Arn | contains ("'${LAYER_ARN}'") | not ) | .Arn ) | join(" ")' <<< "$res")
+	local existLayers=$(jq -r '.Configuration.Layers | map(select(.Arn | contains ("'${LAYER_ARN}'") | not ) | .Arn ) | join(" ")' <<< "$res")
 	echo "${existLayers}"
 
 	if [ $(wc -w <<< $existLayers) -le 4 ]
