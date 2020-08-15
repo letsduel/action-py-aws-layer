@@ -10,6 +10,7 @@ zipping_code(){
 
 publishing_as_layer(){
 	echo "Publishing as a layer..."
+	echo "${INPUT_LAMBDA_LAYER_ARN}"
 	local result=$(aws lambda publish-layer-version --layer-name "${INPUT_LAMBDA_LAYER_ARN}" --zip-file fileb://code.zip --region us-east-1)
 	LAYER_VERSION=$(jq '.Version' <<< "$result")
 	rm -rf python
