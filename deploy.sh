@@ -17,15 +17,35 @@ zipping_code(){
 publishing_as_layer(){
 	echo "Publishing as ${lambda_layer} layer..."
 
-	local result=$(aws lambda publish-layer-version --layer-name "${lambda_layer}" --zip-file fileb://code.zip --region us-east-1)
-	LAYER_ARN_VERSION=$(jq '.LayerVersionArn' <<< "$result")
+	#local result=$(aws lambda publish-layer-version --layer-name "${lambda_layer}" --zip-file fileb://code.zip --region us-east-1)
+	LAYER_ARN="arn:aws:lambda:us-east-1:343449118303:layer:pymongo" #$(jq '.LayerVersion' <<< "$result")
+	LAYER_VERSION_ARN="arn:aws:lambda:us-east-1:343449118303:layer:pymongo:6" #$(jq '.LayerVersionArn' <<< "$result")
 	rm -rf python
 	rm code.zip
 }
 
 update_function_layers(){
-	echo "Using the layer in the functions... ${lambda_functions} ${LAYER_ARN_VERSION}"
-	aws lambda update-function-configuration --function-name "${lambda_functions}" --layers "${LAYER_ARN_VERSION}" --region "us-east-1"
+	echo "Using the layer in the functions... ${lambda_functions} ${lambda_layer}"
+
+	echo "Fetching exisitng layers in function"
+	local res=$(aws lambda get-function --function-name "${lambda_functions}")
+	local existLayers=$(jq '.Configuration.Layers | map(select(.Arn | contains ("${LAYER_ARN}") | not ) | .Arn ) | join(" ")' <<< "$res")
+
+	if [ $(wc -w <<< $existLayers) -le 4 ]
+	then 
+		echo "Adding layer to function"
+		local resp=$(aws lambda update-function-configuration --function-name "${lambda_functions}" --layers "${LAYER_VERSION_ARN} ${existLayers}" --region "us-east-1")
+
+		if [ $(jq '.LastUpdateStatus' <<< "$resp") == "Successfull"]
+		then 
+			echo "Successful"
+		else
+			echo "error: ${resp}"
+		fi
+
+	else 
+		echo "Too many layers on function ${lambda_functions}"
+	fi
 }
 
 deploy_aws_layer(){
