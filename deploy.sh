@@ -1,5 +1,11 @@
 #!/bin/bash
 
+configure_aws_credentials(){
+	aws configure set aws_access_key_id "${AWS_ACCESS_KEY_ID}"
+    aws configure set aws_secret_access_key "${AWS_SECRET_ACCESS_KEY}"
+    aws configure set default.region "${AWS_DEFAULT_REGION}"
+}
+
 zipping_code(){
 	echo "Zipping repository..."
     cd ..
@@ -9,7 +15,7 @@ zipping_code(){
 }
 
 publishing_as_layer(){
-	echo "Publishing as a ${lambda_layer} layer..."
+	echo "Publishing as ${lambda_layer} layer..."
 
 	local result=$(aws lambda publish-layer-version --layer-name "${lambda_layer}" --zip-file fileb://code.zip --region us-east-1)
 	LAYER_VERSION=$(jq '.Version' <<< "$result")
@@ -23,6 +29,7 @@ update_function_layers(){
 }
 
 deploy_aws_layer(){
+	configure_aws_credentials
 	zipping_code
 	publishing_as_layer
 	update_function_layers
