@@ -18,14 +18,14 @@ publishing_as_layer(){
 	echo "Publishing as ${lambda_layer} layer..."
 
 	local result=$(aws lambda publish-layer-version --layer-name "${lambda_layer}" --zip-file fileb://code.zip --region us-east-1)
-	LAYER_VERSION=$(jq '.Version' <<< "$result")
+	LAYER_ARN_VERSION=$(jq '.LayerVersionArn' <<< "$result")
 	rm -rf python
 	rm code.zip
 }
 
 update_function_layers(){
 	echo "Using the layer in the functions... ${lambda_functions}"
-	aws lambda update-function-configuration --function-name "${lambda_functions}" --layers "${lambda_layer}:${LAYER_VERSION}" --region "us-east-1"
+	aws lambda update-function-configuration --function-name "${lambda_functions}" --layers "${LAYER_ARN_VERSION}" --region "us-east-1"
 }
 
 deploy_aws_layer(){
