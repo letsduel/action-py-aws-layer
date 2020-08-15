@@ -31,6 +31,7 @@ update_function_layers(){
 	local res=$(aws lambda get-function --function-name "${lambda_functions}")
 	local existLayers=$(jq -r '.Configuration.Layers | map(select(.Arn | contains ("'${LAYER_ARN}'") | not ) | .Arn ) | join(" ")' <<< "$res")
 	echo "${existLayers}"
+	echo "${LAYER_VERSION_ARN}"
 
 	if [ $(wc -w <<< $existLayers) -le 4 ]
 	then 
