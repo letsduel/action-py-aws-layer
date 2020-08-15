@@ -38,7 +38,7 @@ update_function_layers(){
 		echo "Adding layer to function"
 		local resp=$(aws lambda update-function-configuration --function-name "${lambda_functions}" --layers "[${LAYER_VERSION_ARN} ${existLayers}]" --region "us-east-1")
 
-		if [ $(jq '.LastUpdateStatus' <<< "$resp") == "Successfull"]
+		if [ $(jq '.LastUpdateStatus' <<< "$resp") == "Successful" ]
 		then 
 			echo "Successful"
 		else
