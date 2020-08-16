@@ -19,7 +19,7 @@ publishing_as_layer(){
 
 	#local result=$(aws lambda publish-layer-version --layer-name "${lambda_layer}" --zip-file fileb://code.zip --region us-east-1)
 	LAYER_ARN="arn:aws:lambda:us-east-1:343449118303:layer:sd-backend" #$(jq '.LayerVersion' <<< "$result")
-	LAYER_VERSION_ARN="arn:aws:lambda:us-east-1:343449118303:layer:sd-backend:3" #$(jq '.LayerVersionArn' <<< "$result")
+	LAYER_VERSION_ARN="arn:aws:lambda:us-east-1:343449118303:layer:sd-backend:2" #$(jq '.LayerVersionArn' <<< "$result")
 	rm -rf python
 	rm code.zip
 }
